@@ -3,3 +3,20 @@ GET http://localhost:5093/weatherforecast
 ###
 
 GET http://localhost:5093/weatherforecast?$select=Summary,TemperatureC
+
+###
+POST http://localhost:5093/odata/$batch
+Content-Type: multipart/mixed; boundary=batch_36522ad7-fc75-4b56-8c71-56071383e77b
+
+--batch_36522ad7-fc75-4b56-8c71-56071383e77b
+Content-Type:application/http
+Content-Transfer-Encoding:binary
+
+GET /weatherforecast?$select=temperatureC HTTP/1.1
+
+--batch_36522ad7-fc75-4b56-8c71-56071383e77b
+Content-Type:application/http
+Content-Transfer-Encoding:binary
+
+GET /weatherforecast?$select=temperatureF HTTP/1.1
+
