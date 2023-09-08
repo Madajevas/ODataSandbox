@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
 
 namespace WebAPI.Controllers
 {
@@ -18,6 +19,7 @@ namespace WebAPI.Controllers
             _logger = logger;
         }
 
+        [EnableQuery]
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
