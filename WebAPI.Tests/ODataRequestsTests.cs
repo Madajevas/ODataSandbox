@@ -54,7 +54,7 @@ namespace WebAPI.Tests
         public async Task CanRetrieveTemperatures()
         {
             var temperatures = testOdataContainer.WeatherForecast
-                .Select(wf => wf.TemperatureC);
+                .Select(wf => new { wf.TemperatureC });
 
             Assert.That(temperatures, Is.Not.Empty);
         }
