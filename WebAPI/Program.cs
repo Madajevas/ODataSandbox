@@ -43,6 +43,13 @@ builder.Services
             }
         };
     });
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("test", policy => policy.RequireAssertion(context =>
+    {
+        return true;
+    }));
+});
 
 var app = builder.Build();
 
