@@ -1,7 +1,12 @@
+using idunno.Authentication.Basic;
+
 using Microsoft.AspNetCore.OData;
 using Microsoft.AspNetCore.OData.Batch;
+using Microsoft.Extensions.Options;
 using Microsoft.OData.Edm;
 using Microsoft.OData.ModelBuilder;
+
+using System.Security.Claims;
 
 using WebAPI;
 
@@ -16,6 +21,28 @@ IEdmModel model = oDataBuilder.GetEdmModel();
 builder.Services.AddControllers()
     .AddOData(options => options.AddRouteComponents("odata", model, new DefaultODataBatchHandler()).Filter().Select().Expand().OrderBy().SetMaxTop(25));
 
+builder.Services
+    .AddAuthentication(BasicAuthenticationDefaults.AuthenticationScheme)
+    .AddBasic(options =>
+    {
+        options.Realm = "oauthtokenexchange";
+        options.Events = new BasicAuthenticationEvents
+        {
+            OnValidateCredentials = context =>
+            {
+                var username = context.Username;
+                var claims = new[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, context.Username, ClaimValueTypes.String, context.Options.ClaimsIssuer),
+                    new Claim( ClaimTypes.Name, context.Username, ClaimValueTypes.String, context.Options.ClaimsIssuer)
+                };
+                context.Principal = new ClaimsPrincipal(new ClaimsIdentity(claims, context.Scheme.Name));
+                context.Success();
+    
+                return Task.CompletedTask;
+            }
+        };
+    });
 
 var app = builder.Build();
 
@@ -23,10 +50,17 @@ var app = builder.Build();
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+// test middleware
+app.Use((context, next) =>
+{
+    return next();
+});
 
 app.UseODataBatching();
 app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

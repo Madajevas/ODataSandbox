@@ -1,8 +1,11 @@
 using Default;
 
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.Configuration;
 using Microsoft.OData.Client;
 
+using System.Net;
+using System.Net.Http.Headers;
 using System.Reflection;
 
 namespace WebAPI.Tests
@@ -22,8 +25,10 @@ namespace WebAPI.Tests
             testClient = factory.CreateClient();
             observationHandler = new ObservingHttpMessageHandler(testClient);
             observingClient = new HttpClient(observationHandler);           // to inspect what actually gets returned
+            observingClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", "dG9tYXM6c2VjdXJl");
 
-            testOdataContainer = new Container(new Uri(testClient.BaseAddress!, "odata")); // metadata got lost
+            testOdataContainer = new Container(new Uri(testClient.BaseAddress!, "odata"));
+            // testOdataContainer.Credentials = new NetworkCredential("tomas", "top-secret");   // does not work like this
             testOdataContainer.HttpRequestTransportMode = HttpRequestTransportMode.HttpClient;
             testOdataContainer.Configurations.RequestPipeline.OnMessageCreating = (args) =>
             {
@@ -67,6 +72,7 @@ namespace WebAPI.Tests
                 testOdataContainer.WeatherForecast);
 
             Assert.That(batchResult.BatchStatusCode, Is.EqualTo(200));
+            Assert.That(batchResult.All(res => res.StatusCode == 200));
         }
     }
 }
