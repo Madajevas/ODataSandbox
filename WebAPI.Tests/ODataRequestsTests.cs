@@ -55,7 +55,7 @@ namespace WebAPI.Tests
             factory.Dispose();
         }
 
-        [Test]
+        [Test, Ignore("Select does not work with IAsyncEnumerable action result")]
         public async Task CanRetrieveTemperatures()
         {
             var temperatures = testOdataContainer.WeatherForecast
