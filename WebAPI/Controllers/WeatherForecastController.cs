@@ -26,16 +26,20 @@ namespace WebAPI.Controllers
         [EnableQuery]
         [HttpGet]
         [Authorize(Policy = "test")]
-        public IEnumerable<WeatherForecast> Get()
+        public async IAsyncEnumerable<WeatherForecast> Get()
         {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            await Task.Yield(); // force async
+
+            foreach (var index in Enumerable.Range(1, 5))
             {
-                Id = index,
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+                yield return new WeatherForecast
+                {
+                    Id = index,
+                    Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+                    TemperatureC = Random.Shared.Next(-20, 55),
+                    Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+                };
+            }
         }
     }
 }
