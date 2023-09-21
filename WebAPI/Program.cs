@@ -2,7 +2,6 @@ using idunno.Authentication.Basic;
 
 using Microsoft.AspNetCore.OData;
 using Microsoft.AspNetCore.OData.Batch;
-using Microsoft.Extensions.Options;
 using Microsoft.OData.Edm;
 using Microsoft.OData.ModelBuilder;
 
@@ -19,7 +18,7 @@ IEdmModel model = oDataBuilder.GetEdmModel();
 
 // Add services to the container.
 builder.Services.AddControllers()
-    .AddOData(options => options.AddRouteComponents("odata", model, new DefaultODataBatchHandler()).Filter().Select().Expand().OrderBy().SetMaxTop(25));
+    .AddOData(options => options.AddRouteComponents("odata", model, new ParallelODataBatchHandler()).Filter().Select().Expand().OrderBy().SetMaxTop(25));
 
 builder.Services
     .AddAuthentication(BasicAuthenticationDefaults.AuthenticationScheme)
@@ -75,3 +74,13 @@ app.Run();
 
 
 public partial class Program { }
+
+internal class ParallelODataBatchHandler : DefaultODataBatchHandler
+{
+    public override async Task<IList<ODataBatchResponseItem>> ExecuteRequestMessagesAsync(IEnumerable<ODataBatchRequestItem> requests, RequestDelegate handler)
+    {
+        var tasks = requests.Select(r => r.SendRequestAsync(handler));
+        await Task.WhenAll(tasks);
+        return tasks.Select(t => t.Result).ToList();
+    }
+}
