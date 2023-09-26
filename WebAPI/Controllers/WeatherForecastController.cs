@@ -26,20 +26,35 @@ namespace WebAPI.Controllers
         [EnableQuery]
         [HttpGet]
         [Authorize(Policy = "test")]
-        public async IAsyncEnumerable<WeatherForecast> Get()
+        public IEnumerable<WeatherForecast> Get()
         {
-            await Task.Yield(); // force async
-
-            foreach (var index in Enumerable.Range(1, 5))
+            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
-                yield return new WeatherForecast
-                {
-                    Id = index,
-                    Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    TemperatureC = Random.Shared.Next(-20, 55),
-                    Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-                };
-            }
+                Id = index,
+                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+                TemperatureC = Random.Shared.Next(-20, 55),
+                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+            })
+            .ToArray();
         }
+
+        //[EnableQuery]
+        //[HttpGet]
+        //[Authorize(Policy = "test")]
+        //public async IAsyncEnumerable<WeatherForecast> Get()
+        //{
+        //    await Task.Yield(); // force async
+
+        //    foreach (var index in Enumerable.Range(1, 5))
+        //    {
+        //        yield return new WeatherForecast
+        //        {
+        //            Id = index,
+        //            Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+        //            TemperatureC = Random.Shared.Next(-20, 55),
+        //            Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+        //        };
+        //    }
+        //}
     }
 }
