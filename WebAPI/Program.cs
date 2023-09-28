@@ -18,7 +18,8 @@ IEdmModel model = oDataBuilder.GetEdmModel();
 
 // Add services to the container.
 builder.Services.AddControllers()
-    .AddOData(options => options.AddRouteComponents("odata", model, new DefaultODataBatchHandler()) // ParallelODataBatchHandler to process in parallel
+    .AddOData(options => options.AddRouteComponents("odata", model, new DefaultODataBatchHandler())
+    // .AddOData(options => options.AddRouteComponents("odata", model, new ParallelODataBatchHandler()) // to process in parallel
         .Filter().Select().Expand().OrderBy().SetMaxTop(25));
 
 builder.Services
