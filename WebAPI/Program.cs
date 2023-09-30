@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.OData.Batch;
 using Microsoft.OData.Edm;
 using Microsoft.OData.ModelBuilder;
 
+using System.Diagnostics;
 using System.Security.Claims;
 
 using WebAPI;
@@ -59,9 +60,14 @@ var app = builder.Build();
 app.UseHttpsRedirection();
 
 // test middleware
-app.Use((context, next) =>
+app.Use(async (context, next) =>
 {
-    return next();
+    // using (var reader = new StreamReader(context.Request.Body))
+    // {
+    //     var body = await reader.ReadToEndAsync();
+    // }
+
+    await next();
 });
 
 app.UseODataBatching();

@@ -3,14 +3,20 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPI", "WebAPI\WebAPI.csproj", "{DBA4CE52-4B41-4C76-96D4-572FEE9ABFB6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAPI", "WebAPI\WebAPI.csproj", "{DBA4CE52-4B41-4C76-96D4-572FEE9ABFB6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Requests", "Requests", "{11C2E6B1-7AA2-48E0-A881-B528F94CC2F4}"
 	ProjectSection(SolutionItems) = preProject
 		Requests\GetWeather.http = Requests\GetWeather.http
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPI.Tests", "WebAPI.Tests\WebAPI.Tests.csproj", "{B61A96D9-9ABA-45BF-96DD-2260E83EB07B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAPI.Tests", "WebAPI.Tests\WebAPI.Tests.csproj", "{B61A96D9-9ABA-45BF-96DD-2260E83EB07B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TypeScriptClient", "TypeScriptClient", "{A9964E4A-3120-468B-B3B9-1E28A3565D78}"
+	ProjectSection(SolutionItems) = preProject
+		TypeScriptClient\index.ts = TypeScriptClient\index.ts
+		TypeScriptClient\run.md = TypeScriptClient\run.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
